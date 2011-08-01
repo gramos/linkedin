@@ -43,16 +43,16 @@ module LinkedIn
           case response.code.to_i
           when 401
             data = Mash.from_json(response.body)
-            raise UnauthorizedError.new(data), "(#{data.status}): #{data.message}"
+            raise LinkedIn::UnauthorizedError.new(data), "(#{data.status}): #{data.message}"
           when 400, 403
             data = Mash.from_json(response.body)
-            raise GeneralError.new(data), "(#{data.status}): #{data.message}"
+            raise LinkedIn::GeneralError.new(data), "(#{data.status}): #{data.message}"
           when 404
-            raise NotFoundError, "(#{response.code}): #{response.message}"
+            raise LinkedIn::NotFoundError, "(#{response.code}): #{response.message}"
           when 500
-            raise InformLinkedInError, "LinkedIn had an internal error. Please let them know in the forum. (#{response.code}): #{response.message}"
+            raise  LinkedIn::InformLinkedInError, "LinkedIn had an internal error. Please let them know in the forum. (#{response.code}): #{response.message}"
           when 502..503
-            raise UnavailableError, "(#{response.code}): #{response.message}"
+            raise LinkedIn::UnavailableError, "(#{response.code}): #{response.message}"
           end
         end
 

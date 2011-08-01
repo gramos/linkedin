@@ -39,19 +39,19 @@ module LinkedIn
         case response.code.to_i
         when 400
           data = LinkedIn::Error.from_xml(response.body)
-          raise RateLimitExceeded.new(data), "(#{response.code}): #{response.message} - #{data.code if data}"
+          raise LinkedIn::RateLimitExceeded.new(data), "(#{response.code}): #{response.message} - #{data.code if data}"
         when 401
           data = LinkedIn::Error.from_xml(response.body)
-          raise Unauthorized.new(data), "(#{response.code}): #{response.message} - #{data.code if data}"
+          raise LinkedIn::UnauthorizedError.new(data), "(#{response.code}): #{response.message} - #{data.code if data}"
         when 403
           data = LinkedIn::Error.from_xml(response.body)
-          raise General.new(data), "(#{response.code}): #{response.message} - #{data.code if data}"
+          raise LinkedIn::GeneralError.new(data), "(#{response.code}): #{response.message} - #{data.code if data}"
         when 404
-          raise NotFound, "(#{response.code}): #{response.message}"
+          raise LinkedIn::NotFoundError, "(#{response.code}): #{response.message}"
         when 500
-          raise InformLinkedIn, "LinkedIn had an internal error. Please let them know in the forum. (#{response.code}): #{response.message}"
+          raise LinkedIn::InformLinkedInError, "LinkedIn had an internal error. Please let them know in the forum. (#{response.code}): #{response.message}"
         when 502..503
-          raise Unavailable, "(#{response.code}): #{response.message}"
+          raise LinkedIn::UnavailableError, "(#{response.code}): #{response.message}"
         end
       end
 

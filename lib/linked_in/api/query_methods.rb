@@ -9,8 +9,17 @@ module LinkedIn
       end
 
       def company(id)
-        path = company_path(id)
+        path = "/companies/#{id}"
         simple_query(path, {:fields => ['name', 'employee-count-range']})
+      end
+
+      def company_by_name(name)
+        path = "/companies/universal-name=#{name}"
+        begin
+          simple_query(path, {:fields => ['name', 'employee-count-range']})
+        rescue LinkedIn::NotFoundError
+          nil
+        end
       end
 
       def connections(options={})
@@ -35,10 +44,6 @@ module LinkedIn
           end
 
           Mash.from_json(get(path))
-        end
-
-        def company_path(id)
-          path = "/companies/#{id}"
         end
 
         def person_path(options)
